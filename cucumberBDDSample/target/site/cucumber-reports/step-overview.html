@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cucumber-JVM Html Reports - Step Overview</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="bootstrap.min.js"></script>
+
+<script type="text/javascript" src="highcharts.js"></script>
+<script type="text/javascript" src="highcharts-3d.js"></script>
+
+<link rel="stylesheet" href="bootstrap.min.css" type="text/css"/>
+
+<link rel="stylesheet" href="reporting.css" type="text/css"/>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#tablesorter").tablesorter();
+});
+</script>
+
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navigation">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse">
+      <p class="navbar-text navbar-left">Cucumber-jvm Report</p>
+      <ul class="nav navbar-nav navbar-right">
+                <li role="presentation" ><a href="feature-overview.html">Features</a></li>
+        <li role="presentation" ><a href="tag-overview.html">Tags</a></li>
+        <li role="presentation"     class="active" ><a href="step-overview.html">Steps</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid" id="summary">
+  <div class="row">
+    <div class="col-md-6">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Project</th>
+                          <th>Number</th>
+                        <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="info">
+            <td>cucumber-jvm-example</td>
+                          <td>42</td>
+                        <td>22 Dec 2023, 01:39</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid" id="title">
+  <h2>Step Statistics</h2>
+      <p>The following graph shows step statistics for this build. Below list is based on results.
+ step does not provide information about result then is not listed below.
+ Additionally @Before and @After are not counted because they are part of the scenarios, not steps.</p>
+  </div>
+
+<div class="container-fluid" id="report-details">
+  <table id="tablesorter" class="stats-table">
+
+    <thead>
+      <tr class="header">
+        <th id="stats-header-feature">Implementation</th>
+        <th id="stats-header-occurrences">Occurrences</th>
+        <th id="stats-header-duration">Duration</th>
+        <th id="stats-header-average">Average</th>
+        <th id="stats-header-status">Ratio</th>
+      </tr>
+    </thead>
+
+    <tbody>
+              <tr>
+                    
+          <td class="tagname">StepDefinitions.validate_error_message(String)</td>
+          <td>5</td>
+          <td class="duration-format">11s 110ms</td>
+          <td class="duration-format">02s 222ms</td>
+          <td class="passed">100.0%</td>
+        </tr>
+              <tr>
+                    
+          <td class="tagname">StepDefinitions.User_launches(String)</td>
+          <td>8</td>
+          <td class="duration-format">11s 005ms</td>
+          <td class="duration-format">01s 375ms</td>
+          <td class="passed">100.0%</td>
+        </tr>
+              <tr>
+                    
+          <td class="tagname">StepDefinitions.complete_checkout_for(String,String,String)</td>
+          <td>2</td>
+          <td class="duration-format">06s 616ms</td>
+          <td class="duration-format">03s 308ms</td>
+          <td class="passed">100.0%</td>
+        </tr>
+              <tr>
+                    
+          <td class="tagname">StepDefinitions.enter_and_and_click_login(String,String)</td>
+          <td>8</td>
+          <td class="duration-format">06s 086ms</td>
+          <td class="duration-format">760ms</td>
+          <td class="passed">100.0%</td>
+        </tr>
+              <tr>
+                    
+          <td class="tagname">StepDefinitions.verify_page_title_as(String)</td>
+          <td>1</td>
+          <td class="duration-format">02s 228ms</td>
+          <td class="duration-format">02s 228ms</td>
+          <td class="passed">100.0%</td>
+        </tr>
+              <tr>
+                    
+          <td class="tagname">StepDefinitions.user_total_purchase_price_should_be_with_in_and(int,int)</td>
+          <td>1</td>
+          <td class="duration-format">01s 221ms</td>
+          <td class="duration-format">01s 221ms</td>
+          <td class="passed">100.0%</td>
+        </tr>
+              <tr>
+                    
+          <td class="tagname">StepDefinitions.user_adds_items_to_basket_and_goes_to_cart(int)</td>
+          <td>1</td>
+          <td class="duration-format">01s 132ms</td>
+          <td class="duration-format">01s 132ms</td>
+          <td class="passed">100.0%</td>
+        </tr>
+              <tr>
+                    
+          <td class="tagname">StepDefinitions.user_buys_items_from_cart_page(int)</td>
+          <td>1</td>
+          <td class="duration-format">638ms</td>
+          <td class="duration-format">638ms</td>
+          <td class="passed">100.0%</td>
+        </tr>
+          </tbody>
+
+    <tfoot>
+      <tr>
+        <td>8</td>
+        <td>27</td>
+        <td class="duration-format">40s 039ms</td>
+        <td class="duration-format">01s 482ms</td>
+        <td>Totals</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+
+<nav class="navbar navbar-default" id="footer">
+  <div class="container-fluid">
+    <p class="navbar-text navbar-right">
+      <a class="navbar-link" href="https://github.com/jenkinsci/cucumber-reports-plugin">Jenkins Plugin</a> |
+      <a class="navbar-link" href="https://github.com/damianszczepanik/cucumber-reporting">Cucumber-JVM Reports</a>
+    </p>
+  </div>
+</nav>
+
+</body>
+</html>

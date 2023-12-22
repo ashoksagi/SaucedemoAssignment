@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cucumber-JVM Html Reports - Tag: @regression</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="bootstrap.min.js"></script>
+
+<script type="text/javascript" src="highcharts.js"></script>
+<script type="text/javascript" src="highcharts-3d.js"></script>
+
+<link rel="stylesheet" href="bootstrap.min.css" type="text/css"/>
+
+<link rel="stylesheet" href="reporting.css" type="text/css"/>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#tablesorter").tablesorter();
+});
+</script>
+
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navigation">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse">
+      <p class="navbar-text navbar-left">Cucumber-jvm Report</p>
+      <ul class="nav navbar-nav navbar-right">
+                <li role="presentation" ><a href="feature-overview.html">Features</a></li>
+        <li role="presentation" ><a href="tag-overview.html">Tags</a></li>
+        <li role="presentation" ><a href="step-overview.html">Steps</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid" id="summary">
+  <div class="row">
+    <div class="col-md-6">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Project</th>
+                          <th>Number</th>
+                        <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="info">
+            <td>cucumber-jvm-example</td>
+                          <td>42</td>
+                        <td>22 Dec 2023, 01:39</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid" id="title">
+  <h2>Tag Report</h2>
+  </div>
+
+
+<div class="container-fluid" id="report-summary">
+  <table class="stats-table">
+    <thead>
+  <tr class="header">
+        <th></th>
+    <th id="stats-header-scenarios" colspan="3">Scenarios</th>
+    <th id="stats-header-steps" colspan="7">Steps</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <tr>
+    <th id="stats-header-key">Tag</th>
+        <th id="stats-header-scenarios-total">Total</th>
+    <th id="stats-header-scenarios-passed">Passed</th>
+    <th id="stats-header-scenarios-failed">Failed</th>
+    <th id="stats-header-steps-total">Total</th>
+    <th id="stats-header-steps-passed"    class="passed">Passed</th>
+    <th id="stats-header-steps-failed"    class="failed">Failed</th>
+    <th id="stats-header-steps-skipped"   class="skipped">Skipped</th>
+    <th id="stats-header-steps-pending"   class="pending">Pending</th>
+    <th id="stats-header-steps-undefined" class="undefined">Undefined</th>
+    <th id="stats-header-steps-missing"   class="missing">Missing</th>
+    <th id="stats-header-duration">Duration</th>
+    <th id="stats-header-status">Status</th>
+  </tr>
+</thead>
+    <tr>
+      <td class="tagname"><a href="regression.html">@regression</a></td>
+      <td>8</td>
+      <td>8</td>
+      <td>0</td>
+      <td>27</td>
+      <td>27</td>
+      <td >0</td>
+      <td >0</td>
+      <td >0</td>
+      <td >0</td>
+      <td >0</td>
+      <td class="duration-format">40s 039ms</td>
+      <td class="passed">Passed</td>
+    </tr>
+  </table>
+</div>
+
+<div class="container-fluid" id="report-details">
+      <a href="cucumber-featurefiles-homepage-feature.html">View Feature File</a>
+    <div class="feature-tags"><a href="testCase2.html">@testCase2</a>, <a href="regression.html">@regression</a>, <a href="Homepage.html">@Homepage</a></div>
+    
+    <div class="passed"><span class="element-keyword">Scenario Outline: </span><span class="element-name">Validate if user can buy desired number of items from a basket of n items.</span></div>
+          <div class="passed"><span class="step-keyword">Given  </span><span class="step-name">User launches &quot;https://www.saucedemo.com&quot;</span><span class="step-duration">01s 647ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">And  </span><span class="step-name">enter &quot;standard_user&quot; and &quot;secret_sauce&quot; and click login</span><span class="step-duration">833ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">When  </span><span class="step-name">user adds 3 items to basket and goes to cart</span><span class="step-duration">01s 132ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">Then  </span><span class="step-name">user buys 2 items from cart page</span><span class="step-duration">638ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">And  </span><span class="step-name">complete checkout for &quot;Ashok Varma&quot; &quot;Sagi&quot; &quot;M2N 7G8&quot;</span><span class="step-duration">03s 345ms</span></div>
+      
+            <div></div>
+      <div></div>
+        
+    <br>
+      <a href="cucumber-featurefiles-homepage-feature.html">View Feature File</a>
+    <div class="feature-tags"><a href="testCase3.html">@testCase3</a>, <a href="regression.html">@regression</a>, <a href="Homepage.html">@Homepage</a></div>
+    
+    <div class="passed"><span class="element-keyword">Scenario Outline: </span><span class="element-name">Validate if user can buy items within desired price range</span></div>
+          <div class="passed"><span class="step-keyword">Given  </span><span class="step-name">User launches &quot;https://www.saucedemo.com&quot;</span><span class="step-duration">01s 519ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">When  </span><span class="step-name">enter &quot;standard_user&quot; and &quot;secret_sauce&quot; and click login</span><span class="step-duration">757ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">Then  </span><span class="step-name">user total purchase price should be with in 30 and 60</span><span class="step-duration">01s 221ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">And  </span><span class="step-name">complete checkout for &quot;Ashok Varma&quot; &quot;Sagi&quot; &quot;M2N 7G8&quot;</span><span class="step-duration">03s 270ms</span></div>
+      
+            <div></div>
+      <div></div>
+        
+    <br>
+      <a href="cucumber-featurefiles-sauseLabsLogin-feature.html">View Feature File</a>
+    <div class="feature-tags"><a href="regression.html">@regression</a>, <a href="LoginPage.html">@LoginPage</a></div>
+    
+    <div class="passed"><span class="element-keyword">Scenario Outline: </span><span class="element-name">Validate Login page functionality by entering the correct login credentials</span></div>
+          <div class="passed"><span class="step-keyword">Given  </span><span class="step-name">User launches &quot;https://www.saucedemo.com&quot;</span><span class="step-duration">01s 256ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">And  </span><span class="step-name">enter &quot;standard_user&quot; and &quot;secret_sauce&quot; and click login</span><span class="step-duration">759ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">Then  </span><span class="step-name">verify page title as &quot;Swag Labs&quot;</span><span class="step-duration">02s 228ms</span></div>
+      
+            <div></div>
+      <div></div>
+        
+    <br>
+      <a href="cucumber-featurefiles-sauseLabsLogin-feature.html">View Feature File</a>
+    <div class="feature-tags"><a href="regression.html">@regression</a>, <a href="LoginPage.html">@LoginPage</a></div>
+    
+    <div class="passed"><span class="element-keyword">Scenario Outline: </span><span class="element-name">Validate error messages on the login page</span></div>
+          <div class="passed"><span class="step-keyword">Given  </span><span class="step-name">User launches &quot;https://www.saucedemo.com&quot;</span><span class="step-duration">01s 266ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">And  </span><span class="step-name">enter &quot;locked_out_user&quot; and &quot;secret_sauce&quot; and click login</span><span class="step-duration">854ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">Then  </span><span class="step-name">validate error message &quot;Epic sadface: Sorry, this user has been locked out.&quot;</span><span class="step-duration">02s 114ms</span></div>
+      
+            <div></div>
+      <div></div>
+        
+    <br>
+      <a href="cucumber-featurefiles-sauseLabsLogin-feature.html">View Feature File</a>
+    <div class="feature-tags"><a href="regression.html">@regression</a>, <a href="LoginPage.html">@LoginPage</a></div>
+    
+    <div class="passed"><span class="element-keyword">Scenario Outline: </span><span class="element-name">Validate error messages on the login page</span></div>
+          <div class="passed"><span class="step-keyword">Given  </span><span class="step-name">User launches &quot;https://www.saucedemo.com&quot;</span><span class="step-duration">01s 320ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">And  </span><span class="step-name">enter &quot;standard_user&quot; and &quot;scret_saucT&quot; and click login</span><span class="step-duration">747ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">Then  </span><span class="step-name">validate error message &quot;Epic sadface: Username and password do not match any user in this service&quot;</span><span class="step-duration">02s 353ms</span></div>
+      
+            <div></div>
+      <div></div>
+        
+    <br>
+      <a href="cucumber-featurefiles-sauseLabsLogin-feature.html">View Feature File</a>
+    <div class="feature-tags"><a href="regression.html">@regression</a>, <a href="LoginPage.html">@LoginPage</a></div>
+    
+    <div class="passed"><span class="element-keyword">Scenario Outline: </span><span class="element-name">Validate error messages on the login page</span></div>
+          <div class="passed"><span class="step-keyword">Given  </span><span class="step-name">User launches &quot;https://www.saucedemo.com&quot;</span><span class="step-duration">01s 264ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">And  </span><span class="step-name">enter &quot;standard_user&quot; and &quot;&quot; and click login</span><span class="step-duration">674ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">Then  </span><span class="step-name">validate error message &quot;Epic sadface: Password is required&quot;</span><span class="step-duration">02s 024ms</span></div>
+      
+            <div></div>
+      <div></div>
+        
+    <br>
+      <a href="cucumber-featurefiles-sauseLabsLogin-feature.html">View Feature File</a>
+    <div class="feature-tags"><a href="regression.html">@regression</a>, <a href="LoginPage.html">@LoginPage</a></div>
+    
+    <div class="passed"><span class="element-keyword">Scenario Outline: </span><span class="element-name">Validate error messages on the login page</span></div>
+          <div class="passed"><span class="step-keyword">Given  </span><span class="step-name">User launches &quot;https://www.saucedemo.com&quot;</span><span class="step-duration">01s 450ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">And  </span><span class="step-name">enter &quot;&quot; and &quot;scret_saucT&quot; and click login</span><span class="step-duration">769ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">Then  </span><span class="step-name">validate error message &quot;Epic sadface: Username is required&quot;</span><span class="step-duration">02s 262ms</span></div>
+      
+            <div></div>
+      <div></div>
+        
+    <br>
+      <a href="cucumber-featurefiles-sauseLabsLogin-feature.html">View Feature File</a>
+    <div class="feature-tags"><a href="regression.html">@regression</a>, <a href="LoginPage.html">@LoginPage</a></div>
+    
+    <div class="passed"><span class="element-keyword">Scenario Outline: </span><span class="element-name">Validate error messages on the login page</span></div>
+          <div class="passed"><span class="step-keyword">Given  </span><span class="step-name">User launches &quot;https://www.saucedemo.com&quot;</span><span class="step-duration">01s 279ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">And  </span><span class="step-name">enter &quot;&quot; and &quot;&quot; and click login</span><span class="step-duration">690ms</span></div>
+      
+            <div></div>
+      <div></div>
+          <div class="passed"><span class="step-keyword">Then  </span><span class="step-name">validate error message &quot;Epic sadface: Username is required&quot;</span><span class="step-duration">02s 355ms</span></div>
+      
+            <div></div>
+      <div></div>
+        
+    <br>
+  </div>
+
+
+<nav class="navbar navbar-default" id="footer">
+  <div class="container-fluid">
+    <p class="navbar-text navbar-right">
+      <a class="navbar-link" href="https://github.com/jenkinsci/cucumber-reports-plugin">Jenkins Plugin</a> |
+      <a class="navbar-link" href="https://github.com/damianszczepanik/cucumber-reporting">Cucumber-JVM Reports</a>
+    </p>
+  </div>
+</nav>
+
+</body>
+</html>
