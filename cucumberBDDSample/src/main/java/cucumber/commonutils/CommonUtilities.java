@@ -23,6 +23,7 @@ public class CommonUtilities {
 	
 	public static WebDriver driver=null;
 	public CommonUtilities(){
+		//driver 
 		driver=TestBase.driver;
 		
 	}
