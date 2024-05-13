@@ -35,7 +35,7 @@ public class CartPage {
 		for (int i = 0; i < (itemsInCart - itemsToBuy); i++) {
 
 			CommonUtilities.prepareWebElementWithDynamicXpath(RemoveItems, "\"+i+1+\"").click();
-
+// test
 		}
 
 		Assert.assertTrue(CommonUtilities.getSizeofWebelements(cartItems) == itemsToBuy);
