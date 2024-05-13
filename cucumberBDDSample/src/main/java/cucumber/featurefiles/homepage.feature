@@ -1,7 +1,7 @@
 @Homepage @regression
 Feature: As a standard user I should be able make a purchase of items as desired. 
 
-  @testCase2 @validate
+  @testCase2
   Scenario Outline: Validate if user can buy desired number of items from a basket of n items. 
     Given User launches "https://www.saucedemo.com"
     And enter "<UserName>" and "<Password>" and click login
