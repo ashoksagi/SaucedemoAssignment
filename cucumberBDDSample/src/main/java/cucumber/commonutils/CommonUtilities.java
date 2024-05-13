@@ -35,11 +35,13 @@ public class CommonUtilities {
 	}
 	
 	public static String getText(WebElement xpath) {
+		//get text method
 		driver=TestBase.driver;
 		return xpath.getText();	 
 	}
 	
 	public static void enterText(WebElement element,String textToBeEntered) {
+		/loop
 		for(int retry=0;retry<2;retry++) {
 		try {
 		new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(element)); // element not visible exception
