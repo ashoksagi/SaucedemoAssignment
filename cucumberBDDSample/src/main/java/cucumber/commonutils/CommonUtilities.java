@@ -1,80 +1,136 @@
-package cucumber.commonutils;
+package com.praveen;
 
-import java.util.NoSuchElementException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.ElementNotSelectableException;
-import org.openqa.selenium.ElementNotVisibleException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import cucumber.testbase.TestBase;
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+    public static void main(String[] args) {
+        // Sample JSON strings for comparison
+        String jsonStr1 ="{\"test1\":[{\"companyName\":\"test1\"},{\"companyName\":\"test\"}]}";
+        String jsonStr2 = "{\"test2\":[{\"companyName\":\"test\"},{\"companyName\":\"test1\"}]}";
 
-public class CommonUtilities {
-	
-	public static WebDriver driver=null;
-	public CommonUtilities(){
-		//driver 
-		driver=TestBase.driver;
-		
-	}
-	public static void openBrowser(String arg1) {
-		driver=TestBase.driver;
-		driver.get(arg1);
-		driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-	    driver.manage().window().maximize();
-	}
-	
-	public static String getText(WebElement xpath) {
-		//get text method
-		driver=TestBase.driver;
-		return xpath.getText();	 
-	}
-	
-	public static void enterText(WebElement element,String textToBeEntered) {
-		/loop
-		for(int retry=0;retry<2;retry++) {
-		try {
-		new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(element)); // element not visible exception
-		element.sendKeys(textToBeEntered);
-		break;
-		}catch (StaleElementReferenceException e) {
-			if(retry<2) {
-			driver.navigate().refresh();
-			}
-		}
-		catch (ElementNotVisibleException e) {
-		System.out.println("Element is not visible even after 20 seconds. Please increase the timeout");
-		}
-		catch (NoSuchElementException e) {
-			System.out.println("Element not found on the page, make sure xpath is correct");
-			}
-		catch (ElementNotSelectableException e) {
-			System.out.println("Element is present but its not selectable, please check if element is disabled");
-			}
-		catch (TimeoutException e) {
-			System.out.println("Page maynot have loaded on given time or check Internet/browser connection");
-			}
-		}
-	}
-	public static void closebrowser() {
-		driver.quit();
-	}
-	public static WebElement prepareWebElementWithDynamicXpath (String xpathValue, String substitutionValue ) {
+        // Parse JSON strings into JSONObject
+        JSONObject json1 = new JSONObject(jsonStr1);
+        JSONObject json2 = new JSONObject(jsonStr2);
 
-        return driver.findElement(By.xpath(xpathValue.replace("xxxx", substitutionValue)));
-}
-	public static int getSizeofWebelements (String xpathValue) {
+        // Compare the two JSONObjects
+        boolean areEqual = compareJSONObjects(json1, json2);
+        System.out.println("Are the two JSONs equal? " + areEqual);
+    }
 
-       return  driver.findElements(By.xpath(xpathValue)).size();
-}
+    // Recursive method to compare two JSONObjects
+    public static boolean compareJSONObjects(JSONObject json1, JSONObject json2) {
+        boolean isSame= json1 == json2;
+
+        Set<String> set1=json1.keySet();
+        Set<String> set2=json2.keySet();
+        Set<String> disjointInSet1 = new HashSet<>(set1);
+        disjointInSet1.removeAll(set2);
+
+        Set<String> disjointInSet2 = new HashSet<>(set2);
+        disjointInSet2.removeAll(set1);
+        if(disjointInSet1.size()>0){
+            System.out.println("Elements not in 2nd JSON: " + disjointInSet1);
+        }
+        if(disjointInSet2.size()>0){
+            System.out.println("Elements not in 1st JSON: " + disjointInSet2);
+        }
+
+        Set<String> commonKeys = new HashSet<>(set1);
+        commonKeys.retainAll(set2);
+
+        for (String key : commonKeys) {
+            Object value1 = json1.get(key);
+            Object value2 = json2.get(key);
+
+            if (value1 instanceof JSONObject && value2 instanceof JSONObject) {
+                if (!compareJSONObjects((JSONObject) value1, (JSONObject) value2)) {
+                    isSame=false;
+                }
+            } else if (value1 instanceof JSONArray && value2 instanceof JSONArray) {
+                if (!compareJSONArrays((JSONArray) value1, (JSONArray) value2)) {
+                    isSame=false;
+                }
+            } else if (!value1.equals(value2)) {
+                System.out.println("Primitive value in both JSON not equal for key: " + key);
+                isSame=false;
+            }
+        }
+        return isSame;
+    }
+
+    private static Map<Object, JSONObject> indexJSONArray(JSONArray array1,String property){
+        JSONArray jsonArray = new JSONArray(array1);
+        Map<Object, JSONObject> indexedObjects = new HashMap<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            Object id = jsonObject.opt(property);
+            indexedObjects.put(id, jsonObject);
+        }
+        return indexedObjects;
+    }
+
+    // Recursive method to compare two JSONArrays
+    public static boolean compareJSONArrays(JSONArray array1, JSONArray array2) {
+        boolean isSame=true;
+        if(array1.length()==0 && array2.length()==0){
+            return isSame;
+        }
+        if (array1.length() != array2.length()) {
+            System.out.println("Lengths of arrays are not matching");
+        }
+
+        Map<Object, JSONObject> array1Map=indexJSONArray(array1, "companyName");
+        Map<Object, JSONObject> array2Map=indexJSONArray(array2, "companyName");
+
+        Set<Object> commonKeys= new HashSet<>(array1Map.keySet());
+        commonKeys.retainAll(array2Map.keySet());
+
+        for(Object key: commonKeys){
+            if (!compareJSONObjects(array1Map.get(key), array2Map.get(key))) {
+                isSame=false;
+            }
+        }
+
+        Set<Object> disjointInSet1 = new HashSet<>(array1Map.keySet());
+        disjointInSet1.removeAll(array2Map.keySet());
+
+        Set<Object> disjointInSet2 = new HashSet<>(array2Map.keySet());
+        disjointInSet2.removeAll(array1Map.keySet());
+        if(disjointInSet1.size()>0){
+            System.out.println("Elements not in 2nd JSON: " + disjointInSet1);
+        }
+        if(disjointInSet2.size()>0){
+            System.out.println("Elements not in 1st JSON: " + disjointInSet2);
+        }
+
+
+        /* for (int i = 0; i < array1.length(); i++) {
+            Object value1 = array1.get(i);
+            Object value2 = array2.get(i);
+
+            if (value1 instanceof JSONObject && value2 instanceof JSONObject) {
+                if (!compareJSONObjects((JSONObject) value1, (JSONObject) value2)) {
+                    isSame=false;
+                }
+            } else if (value1 instanceof JSONArray && value2 instanceof JSONArray) {
+                if (!compareJSONArrays((JSONArray) value1, (JSONArray) value2)) {
+                    isSame=false;
+                }
+            } else if (!value1.equals(value2)) {
+                isSame=false;
+            }
+        }  */
+        return isSame;
+    }
 }
