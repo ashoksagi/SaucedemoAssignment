@@ -26,15 +26,18 @@ public class JSONComparator {
         this.configJSON = configJSON;
     }
 
-    public String getCurrentJSONPath(String currenyKey) {
-        String currentJSONPath = String.join(".", jsonPath);
+    public String getCurrentJSONPath(String currenyKey,boolean withId) {
+        String jsonPathStr = String.join(".", jsonPath);
         if (currenyKey != null) {
             //System.out.println("currentJSONPath:" + currentJSONPath + "." + currenyKey);
-            return currentJSONPath + "." + currenyKey;
+            jsonPathStr= jsonPathStr + "." + currenyKey;
         } else {
             //System.out.println("currentJSONPath:" + currentJSONPath);
-            return currentJSONPath;
         }
+        if(withId==false){
+            jsonPathStr= jsonPathStr.replaceAll("\\.\\[.*?\\]\\.", ".");
+        }
+        return jsonPathStr;
     }
     
     private void pushToJSONPath(String key){
@@ -54,7 +57,6 @@ public class JSONComparator {
         if(parentKey!=null){
           pushToJSONPath(parentKey);
         }
-        isSame = json1 == json2;
         Set<String> set1 = json1.keySet();
         Set<String> set2 = json2.keySet();
         Set<String> disjointInSet1 = new HashSet<>(set1);
@@ -62,12 +64,12 @@ public class JSONComparator {
 
         Set<String> disjointInSet2 = new HashSet<>(set2);
         disjointInSet2.removeAll(set1);
-        String currentJSONPath=getCurrentJSONPath(null);
+        String currentJSONPath=getCurrentJSONPath(null,true);
         if (disjointInSet1.size() > 0) {
-            System.out.println("Elements/Props Extra IN JSON1: " + disjointInSet1+" AT PATH"+currentJSONPath);
+            System.out.println("JSON1 extra: " + disjointInSet1+" AT PATH: "+currentJSONPath);
         }
         if (disjointInSet2.size() > 0) {
-            System.out.println("Elements/Props Extra IN JSON2" + disjointInSet2+" AT PATH"+currentJSONPath);
+            System.out.println("JSON2 extra: " + disjointInSet2+" AT PATH: "+currentJSONPath);
         }
 
         Set<String> commonKeys = new HashSet<>(set1);
@@ -77,19 +79,17 @@ public class JSONComparator {
             Object value1 = json1.get(key);
             Object value2 = json2.get(key);
 
-            currentJSONPath=getCurrentJSONPath(key);
+            currentJSONPath=getCurrentJSONPath(key,true);
             
             if (value1 instanceof JSONObject && value2 instanceof JSONObject) {
                 if (!compareJSONObjects((JSONObject) value1, (JSONObject) value2, key)) {
-                    isSame = false;
                 }
             } else if (value1 instanceof JSONArray && value2 instanceof JSONArray) {
                 if (!compareJSONArrays((JSONArray) value1, (JSONArray) value2, key)) {
-                    isSame = false;
                 }
             } else if (!value1.equals(value2)) {
+                isSame=false;
                 System.out.println("Primitive value not matching: " + currentJSONPath +" : "+ String.valueOf(value1) + "!=" + String.valueOf(value2));
-                isSame = false;
             }
         }
         if(parentKey!=null){
@@ -110,7 +110,7 @@ public class JSONComparator {
         ExtendedJSONArray eArray1 = new ExtendedJSONArray(array1);
         ExtendedJSONArray eArray2 = new ExtendedJSONArray(array2);
 
-        String currentJSONPath=getCurrentJSONPath(null);
+        String currentJSONPath=getCurrentJSONPath(null,false);
 
         String idGenJsonExpr = configJSON.optString(currentJSONPath);
         if(idGenJsonExpr==""){
@@ -129,7 +129,7 @@ public class JSONComparator {
             if(currentJSONPath.equalsIgnoreCase(rootJsonElement)){
                 System.out.println("**************Start**************"+parentKey+":"+String.valueOf(eleID));
             }
-            compareJSONObjects(array1Map.get(eleID), array2Map.get(eleID),null);
+            compareJSONObjects(array1Map.get(eleID), array2Map.get(eleID),"["+String.valueOf(eleID)+"]");
             if(currentJSONPath.equalsIgnoreCase(rootJsonElement)){
                 System.out.println("**************End**************"+parentKey+":"+String.valueOf(eleID)+"\n");
             }
@@ -143,12 +143,15 @@ public class JSONComparator {
         Set<Object> disjointInSet2 = new HashSet<>(array2Map.keySet());
         disjointInSet2.removeAll(array1Map.keySet());
         if (disjointInSet1.size() > 0) {
-            System.out.println("JSON1 extra:" + disjointInSet1+" AT PATH:"+currentJSONPath);
+            System.out.println("JSON1 extra:" + disjointInSet1+" AT PATH:"+getCurrentJSONPath(null,true));
+            isSame=false;
         }
         if (disjointInSet2.size() > 0) {
-            System.out.println("JSON2 extra:" + disjointInSet2+" AT PATH:"+currentJSONPath);
+            System.out.println("JSON2 extra:" + disjointInSet2+" AT PATH:"+getCurrentJSONPath(null,true));
+            isSame=false;
         }
         popFromJSONPath();
         return false;
     }
 }
+
