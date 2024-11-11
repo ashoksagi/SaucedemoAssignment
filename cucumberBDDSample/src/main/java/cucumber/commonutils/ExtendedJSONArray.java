@@ -8,11 +8,23 @@ public class JsonKeyChecker {
     public static void main(String[] args) {
         String filePath = "path/to/your/jsonfile.json"; // Path to your JSON file
         String keyToCheck = "yourKey"; // Key to check in the JSON
-        String newValue = "newValue"; // Value to add if key is not present
+        String jsonStringValue = "{\"name\":\"John Doe\",\"age\":30}"; // JSON string to add as value
 
         try {
-            // Read the JSON file
+            // Create a file object
             File file = new File(filePath);
+
+            // Check if the file exists
+            if (!file.exists()) {
+                // If the file does not exist, create it with initial JSON content
+                JSONObject initialJson = new JSONObject();
+                try (FileWriter fileWriter = new FileWriter(file)) {
+                    fileWriter.write(initialJson.toString(4)); // Pretty print with an indent factor of 4
+                }
+                System.out.println("File did not exist and has been created with initial content.");
+            }
+
+            // Read the JSON file
             FileReader reader = new FileReader(file);
             StringBuilder content = new StringBuilder();
             int i;
@@ -21,22 +33,30 @@ public class JsonKeyChecker {
             }
             reader.close();
 
+            // Convert the StringBuilder content to String
+            String jsonString = content.toString();
+
             // Parse the JSON content
-            JSONObject jsonObject = new JSONObject(content.toString());
+            JSONObject jsonObject = new JSONObject(jsonString);
 
             // Check if the key is present
-            if (!jsonObject.has(keyToCheck)) {
+            if (jsonObject.has(keyToCheck)) {
+                // Key is present, retrieve its value
+                Object value = jsonObject.get(keyToCheck);
+                System.out.println("Key found! Value: " + value);
+            } else {
+                // Parse the JSON string value
+                JSONObject valueObject = new JSONObject(jsonStringValue);
+
                 // If key is not present, add the key-value pair
-                jsonObject.put(keyToCheck, newValue);
+                jsonObject.put(keyToCheck, valueObject);
 
                 // Write the updated JSON back to the file
-                FileWriter writer = new FileWriter(file);
-                writer.write(jsonObject.toString(4)); // Pretty print with an indent factor of 4
-                writer.close();
+                try (FileWriter fileWriter = new FileWriter(file)) {
+                    fileWriter.write(jsonObject.toString(4)); // Pretty print with an indent factor of 4
+                }
 
                 System.out.println("Key added successfully.");
-            } else {
-                System.out.println("Key already exists in the JSON.");
             }
         } catch (IOException e) {
             e.printStackTrace();
