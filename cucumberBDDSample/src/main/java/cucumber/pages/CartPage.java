@@ -1,50 +1,22 @@
-package cucumber.pages;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import org.junit.Assert;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+public class JsonArrayToObject {
+    public static void main(String[] args) {
+        // JSON array string
+        String jsonArrayString = "[{\"name\":\"John Doe\",\"age\":30},{\"name\":\"Jane Doe\",\"age\":25}]";
 
-import cucumber.commonutils.CommonUtilities;
-import cucumber.testbase.TestBase;
+        // Parse the JSON array string
+        JSONArray jsonArray = new JSONArray(jsonArrayString);
 
-public class CartPage {
+        // Wrap the JSON array into a JSON object with a key
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data", jsonArray);
 
-	String cartItems = "//div[@class='cart_item']";
+        // Convert JSON object to string
+        String jsonObjectString = jsonObject.toString(4); // Pretty print with an indent factor of 4
 
-	String RemoveItems = "(//button[contains(text(),'Remove')])[xxxx]";
-
-	@FindBy(id = "checkout")
-	WebElement checkout;
-
-	public CartPage() {
-		PageFactory.initElements(TestBase.driver, this);
-	}
-
-	public void validateItemsInCart(int numOfItems) {
-
-		Assert.assertTrue(CommonUtilities.getSizeofWebelements(cartItems) == numOfItems);
-
-	}
-
-	public void removeItemsInCart(int itemsToBuy) {
-
-		int itemsInCart = CommonUtilities.getSizeofWebelements(cartItems);
-
-		for (int i = 0; i < (itemsInCart - itemsToBuy); i++) {
-
-			CommonUtilities.prepareWebElementWithDynamicXpath(RemoveItems, "\"+i+1+\"").click();
-// test
-		}
-
-		Assert.assertTrue(CommonUtilities.getSizeofWebelements(cartItems) == itemsToBuy);
-	}
-
-	public void clickCheckout() {
-
-		checkout.click();
-
-	}
-
+        // Print the JSON object string
+        System.out.println(jsonObjectString);
+    }
 }
