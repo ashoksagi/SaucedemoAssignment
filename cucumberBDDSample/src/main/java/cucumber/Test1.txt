@@ -1,13 +1,12 @@
 {
   "$match": {
-    "$expr": {
-      "$gt": [
-        { "$size": "$details" },
-        2
-      ]
-    }
+    "$and": [
+      { "details": { "$exists": true, "$type": "array" } },
+      { "$expr": { "$gt": [{ "$size": "$details" }, 2] } }
+    ]
   }
 }
+
 
 
 
