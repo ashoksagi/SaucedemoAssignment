@@ -1,0 +1,16 @@
+{
+  "$match": {
+    "details": {
+      "$exists": true,
+      "$type": "array",
+      "$gt": { "$size": "$details" },
+      "$size": { "$gt": 2 }
+    }
+  }
+}
+
+
+{
+  "$count": "count"
+}
+
