@@ -1,7 +1,4 @@
-
-{
-  "$group": {
-    "_id": "$SEG_CODE",
-    "count": { "$sum": 1 }
-  }
-}
+db.CPOADMIN.company.aggregate([
+  { $group: { _id: "$segmentCode" } },
+  { $count: "distinctSegmentCodeCount" }
+])
