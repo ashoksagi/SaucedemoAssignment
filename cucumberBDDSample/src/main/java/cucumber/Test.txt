@@ -1,16 +1,7 @@
+
 {
-  "$match": {
-    "details": {
-      "$exists": true,
-      "$type": "array",
-      "$gt": { "$size": "$details" },
-      "$size": { "$gt": 2 }
-    }
+  "$group": {
+    "_id": "$SEG_CODE",
+    "count": { "$sum": 1 }
   }
 }
-
-
-{
-  "$count": "count"
-}
-
