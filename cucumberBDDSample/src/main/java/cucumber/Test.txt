@@ -1,4 +1,10 @@
-db.CPOADMIN.company.aggregate([
-  { $group: { _id: "$segmentCode" } },
-  { $count: "distinctSegmentCodeCount" }
-])
+
+SELECT 
+    JSON_VALUE(ATTRIBUTE_DOCUMENT, '$.ba360') AS ba360_value, 
+    COUNT(*) AS count
+FROM 
+    MCESSERV.ATTRIBUTE_VALUE
+WHERE 
+    ATTRIBUTE_PKREF = 40
+GROUP BY 
+    JSON_VALUE(ATTRIBUTE_DOCUMENT, '$.ba360');
