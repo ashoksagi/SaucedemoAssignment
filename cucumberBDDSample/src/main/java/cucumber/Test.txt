@@ -1,38 +1,19 @@
-[
-  {
-    "$group": {
-      "_id": "$resourcePkref",
-      "bankIds": { "$push": "$bankIds" }
-    }
-  },
-  {
-    "$unwind": "$bankIds"
-  },
-  {
-    "$unwind": "$bankIds"
-  },
-  {
-    "$group": {
-      "_id": "$bankIds",
-      "resourcePkrefs": { "$addToSet": "$_id" },
-      "count": { "$sum": 1 }
-    }
-  },
-  {
-    "$match": {
-      "count": { "$gt": 1 } // Change this to your desired threshold
-    }
-  },
-  {
-    "$project": {
-      "bankId": "$_id",
-      "count": 1,
-      "resourcePkrefs": 1
-    }
-  },
-  {
-    "$sort": {
-      "count": -1
-    }
-  }
-]
+Subject: Request for Employment Verification Letter
+
+Dear Vijay Tyagi,
+
+I am writing to request an employment verification letter, also known as an experience letter, to confirm my employment tenure and details with Scotiabank.
+
+Could you please provide me with a letter that includes the following details:
+
+- Dates of employment
+- Job title(s) held
+- Brief description of job responsibilities
+- Reason for leaving (optional)
+
+I would appreciate it if you could provide this letter at your earliest convenience. If there are any additional steps or documentation required from my end, please let me know.
+
+Thank you for your assistance in this matter.
+
+Sincerely,
+Ashok Sagi
