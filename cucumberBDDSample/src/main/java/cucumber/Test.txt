@@ -1,19 +1,26 @@
-Subject: Request for Employment Verification Letter
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-Dear Vijay Tyagi,
-
-I am writing to request an employment verification letter, also known as an experience letter, to confirm my employment tenure and details with Scotiabank.
-
-Could you please provide me with a letter that includes the following details:
-
-- Dates of employment
-- Job title(s) held
-- Brief description of job responsibilities
-- Reason for leaving (optional)
-
-I would appreciate it if you could provide this letter at your earliest convenience. If there are any additional steps or documentation required from my end, please let me know.
-
-Thank you for your assistance in this matter.
-
-Sincerely,
-Ashok Sagi
+public class RandomCompanySelector {
+    public static void main(String[] args) {
+        List<String> companies = new ArrayList<>();
+        
+        // Populate the list with company names (for demonstration purposes)
+        companies.add("Company A");
+        companies.add("Company B");
+        companies.add("Company C");
+        // Add more companies to the list
+        
+        // Shuffle the list to randomize the order
+        Collections.shuffle(companies);
+        
+        // Get the first 50 companies from the shuffled list
+        List<String> randomCompanies = companies.subList(0, Math.min(50, companies.size()));
+        
+        // Print the selected companies
+        for (String company : randomCompanies) {
+            System.out.println(company);
+        }
+    }
+}
