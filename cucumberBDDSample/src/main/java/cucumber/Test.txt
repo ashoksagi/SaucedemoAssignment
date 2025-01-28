@@ -1,26 +1,85 @@
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
+import org.junit.runner.Description;
+import org.junit.runner.Runner;
+import org.junit.runner.notification.RunNotifier;
+
+@CucumberOptions(
+    features = "src/test/resources/features",
+    glue = {"stepDefinitions"}
+)
+public class CustomTestRunner extends Runner {
+
+    private Class<?> testClass;
+    private static final int TOTAL_COMPANIES = 1000;
+    private static final int BATCH_SIZE = 50;
+
+    public CustomTestRunner(Class<?> testClass) {
+        this.testClass = testClass;
+    }
+
+    @Override
+    public Description getDescription() {
+        return Description.createTestDescription(testClass, "CustomTestRunner");
+    }
+
+    @Override
+    public void run(RunNotifier notifier) {
+        for (int i = 0; i < TOTAL_COMPANIES / BATCH_SIZE; i++) {
+            System.setProperty("currentBatch", String.valueOf(i));
+            Cucumber cucumber = new Cucumber(testClass);
+            cucumber.run(notifier);
+        }
+    }
+
+    public static void main(String[] args) {
+        CustomTestRunner runner = new CustomTestRunner(YourStepDefinitionClass.class);
+        RunNotifier notifier = new RunNotifier();
+        runner.run(notifier);
+    }
+}
+
+
+
+##########
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class RandomCompanySelector {
-    public static void main(String[] args) {
-        List<String> companies = new ArrayList<>();
-        
+public class CompanySteps {
+
+    List<String> companies = new ArrayList<>();
+    int currentBatch;
+    List<String> selectedCompanies;
+
+    @Given("a list of 1000 companies")
+    public void givenAListOf1000Companies() {
         // Populate the list with company names (for demonstration purposes)
-        companies.add("Company A");
-        companies.add("Company B");
-        companies.add("Company C");
-        // Add more companies to the list
-        
-        // Shuffle the list to randomize the order
-        Collections.shuffle(companies);
-        
-        // Get the first 50 companies from the shuffled list
-        List<String> randomCompanies = companies.subList(0, Math.min(50, companies.size()));
-        
-        // Print the selected companies
-        for (String company : randomCompanies) {
-            System.out.println(company);
+        for (int i = 1; i <= 1000; i++) {
+            companies.add("Company " + i);
         }
+
+        // Get the current batch index from system properties
+        currentBatch = Integer.parseInt(System.getProperty("currentBatch", "0"));
+    }
+
+    @Given("I pick the next 50 companies from the list")
+    public void iPickTheNext50CompaniesFromTheList() {
+        int startIndex = currentBatch * 50;
+        int endIndex = Math.min(startIndex + 50, companies.size());
+        selectedCompanies = companies.subList(startIndex, endIndex);
+
+        System.out.println("Selected companies: " + selectedCompanies);
+    }
+
+    @When("Payments Company profile API is set successfully for {int} companies")
+    public void paymentsCompanyProfileAPIIsSetSuccessfullyForCompanies(int companyCount) {
+        // Logic to set the API for the selected companies
+        System.out.println("Setting API for " + companyCount + " companies.");
+    }
+
+    @Then("I save CompanyInfo response to compare against Mongo response")
+    public void iSaveCompanyInfoResponseToCompareAgainstMongoResponse() {
+        // Logic to save and compare the responses
+        System.out.println("Saving and comparing CompanyInfo response.");
     }
 }
