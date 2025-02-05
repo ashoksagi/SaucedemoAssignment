@@ -1,85 +1,32 @@
-import cucumber.api.CucumberOptions;
-import cucumber.api.junit.Cucumber;
-import org.junit.runner.Description;
-import org.junit.runner.Runner;
-import org.junit.runner.notification.RunNotifier;
+Got it. Here is the revised version of your email:
 
-@CucumberOptions(
-    features = "src/test/resources/features",
-    glue = {"stepDefinitions"}
-)
-public class CustomTestRunner extends Runner {
+---
 
-    private Class<?> testClass;
-    private static final int TOTAL_COMPANIES = 1000;
-    private static final int BATCH_SIZE = 50;
+**Subject:** Urgent: Testing Blocked in SIT Environment
 
-    public CustomTestRunner(Class<?> testClass) {
-        this.testClass = testClass;
-    }
+---
 
-    @Override
-    public Description getDescription() {
-        return Description.createTestDescription(testClass, "CustomTestRunner");
-    }
+Hello Team,
 
-    @Override
-    public void run(RunNotifier notifier) {
-        for (int i = 0; i < TOTAL_COMPANIES / BATCH_SIZE; i++) {
-            System.setProperty("currentBatch", String.valueOf(i));
-            Cucumber cucumber = new Cucumber(testClass);
-            cucumber.run(notifier);
-        }
-    }
+I hope this message finds you well.
 
-    public static void main(String[] args) {
-        CustomTestRunner runner = new CustomTestRunner(YourStepDefinitionClass.class);
-        RunNotifier notifier = new RunNotifier();
-        runner.run(notifier);
-    }
-}
+I am writing to inform you that the SIT environment was down yesterday from 1 PM EST to 5:15 PM EST due to a login page issue. Unfortunately, as soon as this issue was resolved, a new problem emerged where we were unable to fetch company records from the search box in CPtools.
 
+We have created a relops for the same but closed it without actually resolving the issue [RELOPS-126845] CPtools-SIT - Not able to search company in UI - Merrill Lynch.
 
-###$$$$$$
+The issue persists and is being tracked as part of this relops [RELOPS-126848] SIT CP TOOL: Company Profile page not loading - Merrill Lynch.
 
-import java.util.ArrayList;
-import java.util.List;
+The SIT environment has proven to be highly unstable, causing us to miss all our deadlines. We are unable to re-test a bug or assist our team in troubleshooting the issue. This has been ongoing for almost a week, and there is no resolution in sight.
 
-public class CompanySteps {
+Our team has been sacrificing personal time and working late to check if the system is operational so that we can test and close at least one or two bugs. 
 
-    List<String> companies = new ArrayList<>();
-    int currentBatch;
-    List<String> selectedCompanies;
+If this situation continues, we will be unable to complete the testing within the already missed timelines.
 
-    @Given("a list of 1000 companies")
-    public void givenAListOf1000Companies() {
-        // Populate the list with company names (for demonstration purposes)
-        for (int i = 1; i <= 1000; i++) {
-            companies.add("Company " + i);
-        }
+Your immediate attention to this matter is greatly appreciated.
 
-        // Get the current batch index from system properties
-        currentBatch = Integer.parseInt(System.getProperty("currentBatch", "0"));
-    }
+Best regards,
+Ashok Sharma
 
-    @Given("I pick the next 50 companies from the list")
-    public void iPickTheNext50CompaniesFromTheList() {
-        int startIndex = currentBatch * 50;
-        int endIndex = Math.min(startIndex + 50, companies.size());
-        selectedCompanies = companies.subList(startIndex, endIndex);
+---
 
-        System.out.println("Selected companies: " + selectedCompanies);
-    }
-
-    @When("Payments Company profile API is set successfully for {int} companies")
-    public void paymentsCompanyProfileAPIIsSetSuccessfullyForCompanies(int companyCount) {
-        // Logic to set the API for the selected companies
-        System.out.println("Setting API for " + companyCount + " companies.");
-    }
-
-    @Then("I save CompanyInfo response to compare against Mongo response")
-    public void iSaveCompanyInfoResponseToCompareAgainstMongoResponse() {
-        // Logic to save and compare the responses
-        System.out.println("Saving and comparing CompanyInfo response.");
-    }
-}
+If you need further assistance or have any other requests, feel free to ask.
