@@ -1,32 +1,24 @@
-Got it. Here is the revised version of your email:
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoDatabase;
 
----
+public class MongoDBConnection {
+    public static void main(String[] args) {
+        String uri = "mongodb://ZSPHNKP:0haMHXj4@usvtxmoscpau01.sdi.corp.bankofamerica.com:27081,usvwam"
+                   + "oscpau02.sdi.corp.bankofamerica.com:27081,usvpamoscpau03.sdi.corp.bankofamerica.com:27"
+                   + "081/?authMechanism=PLAIN&authSource=%24external&tls=true&tlsCAFile=C%3A%5CUsers%5Czkn"
+                   + "wjfh%5CDocuments%5Cmongo-ca.pem";
 
-**Subject:** Urgent: Testing Blocked in SIT Environment
+        ConnectionString connectionString = new ConnectionString(uri);
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(connectionString)
+                .build();
 
----
+        MongoClient mongoClient = MongoClients.create(settings);
+        MongoDatabase database = mongoClient.getDatabase("yourDatabaseName");
 
-Hello Team,
-
-I hope this message finds you well.
-
-I am writing to inform you that the SIT environment was down yesterday from 1 PM EST to 5:15 PM EST due to a login page issue. Unfortunately, as soon as this issue was resolved, a new problem emerged where we were unable to fetch company records from the search box in CPtools.
-
-We have created a relops for the same but closed it without actually resolving the issue [RELOPS-126845] CPtools-SIT - Not able to search company in UI - Merrill Lynch.
-
-The issue persists and is being tracked as part of this relops [RELOPS-126848] SIT CP TOOL: Company Profile page not loading - Merrill Lynch.
-
-The SIT environment has proven to be highly unstable, causing us to miss all our deadlines. We are unable to re-test a bug or assist our team in troubleshooting the issue. This has been ongoing for almost a week, and there is no resolution in sight.
-
-Our team has been sacrificing personal time and working late to check if the system is operational so that we can test and close at least one or two bugs. 
-
-If this situation continues, we will be unable to complete the testing within the already missed timelines.
-
-Your immediate attention to this matter is greatly appreciated.
-
-Best regards,
-Ashok Sharma
-
----
-
-If you need further assistance or have any other requests, feel free to ask.
+        System.out.println("Connected to the database successfully");
+    }
+}
