@@ -3,22 +3,42 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+import com.mongodb.client.model.Filters;
 
 public class MongoDBConnection {
     public static void main(String[] args) {
-        String uri = "mongodb://ZSPHNKP:0haMHXj4@usvtxmoscpau01.sdi.corp.bankofamerica.com:27081,usvwam"
-                   + "oscpau02.sdi.corp.bankofamerica.com:27081,usvpamoscpau03.sdi.corp.bankofamerica.com:27"
-                   + "081/?authMechanism=PLAIN&authSource=%24external&tls=true&tlsCAFile=C%3A%5CUsers%5Czkn"
-                   + "wjfh%5CDocuments%5Cmongo-ca.pem";
+        // Connection string
+        String uri = "mongodb://username:password@host:port/database?authMechanism=PLAIN&authSource=%24external&tls=true&tlsCAFile=/path/to/ca-certificate.crt";
 
+        // Create MongoClientSettings
         ConnectionString connectionString = new ConnectionString(uri);
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();
 
+        // Create MongoClient
         MongoClient mongoClient = MongoClients.create(settings);
+
+        // Get the database
         MongoDatabase database = mongoClient.getDatabase("yourDatabaseName");
 
-        System.out.println("Connected to the database successfully");
+        // Get the collection
+        MongoCollection<Document> collection = database.getCollection("yourCollectionName");
+
+        // Execute a basic query: Find a document with a specific field value
+        Document query = new Document("fieldName", "fieldValue");
+        Document result = collection.find(query).first();
+
+        // Print the result
+        if (result != null) {
+            System.out.println("Found document: " + result.toJson());
+        } else {
+            System.out.println("No document found with the specified field value.");
+        }
+
+        // Close the client
+        mongoClient.close();
     }
 }
