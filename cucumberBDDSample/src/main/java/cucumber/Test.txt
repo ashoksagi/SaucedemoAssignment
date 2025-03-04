@@ -1,44 +1,19 @@
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoCollection;
-import org.bson.Document;
-import com.mongodb.client.model.Filters;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-public class MongoDBConnection {
+public class PrettyPrintJSON {
     public static void main(String[] args) {
-        // Connection string
-        String uri = "mongodb://username:password@host:port/database?authMechanism=PLAIN&authSource=%24external&tls=true&tlsCAFile=/path/to/ca-certificate.crt";
+        // JSON string
+        String json = "{\"name\":\"Ashok\",\"age\":25,\"city\":\"Brampton\"}";
 
-        // Create MongoClientSettings
-        ConnectionString connectionString = new ConnectionString(uri);
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(connectionString)
-                .build();
+        // Create Gson instance with pretty-printing enabled
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        // Create MongoClient
-        MongoClient mongoClient = MongoClients.create(settings);
+        // Parse and pretty-print JSON
+        Object jsonObject = gson.fromJson(json, Object.class);
+        String prettyJson = gson.toJson(jsonObject);
 
-        // Get the database
-        MongoDatabase database = mongoClient.getDatabase("yourDatabaseName");
-
-        // Get the collection
-        MongoCollection<Document> collection = database.getCollection("yourCollectionName");
-
-        // Execute a basic query: Find a document with a specific field value
-        Document query = new Document("fieldName", "fieldValue");
-        Document result = collection.find(query).first();
-
-        // Print the result
-        if (result != null) {
-            System.out.println("Found document: " + result.toJson());
-        } else {
-            System.out.println("No document found with the specified field value.");
-        }
-
-        // Close the client
-        mongoClient.close();
+        // Print pretty JSON
+        System.out.println(prettyJson);
     }
 }
