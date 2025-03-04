@@ -1,19 +1,57 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class PrettyPrintJSON {
+public class ServerMonitor {
     public static void main(String[] args) {
-        // JSON string
-        String json = "{\"name\":\"Ashok\",\"age\":25,\"city\":\"Brampton\"}";
+        // Define the server URL
+        String serverUrl = "http://your-server-url.com";
 
-        // Create Gson instance with pretty-printing enabled
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        // Timer to run task every hour (3600000 ms)
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (!isServerUp(serverUrl)) {
+                    System.out.println("Server is down! Attempting to restart...");
+                    restartServer();
+                } else {
+                    System.out.println("Server is up and running.");
+                }
+            }
+        }, 0, 3600000); // Delay = 0 ms, Period = 3600000 ms (1 hour)
 
-        // Parse and pretty-print JSON
-        Object jsonObject = gson.fromJson(json, Object.class);
-        String prettyJson = gson.toJson(jsonObject);
+        // Keep the program running
+        System.out.println("Server monitor started. Press Ctrl+C to stop.");
+        try {
+            Thread.sleep(Long.MAX_VALUE);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-        // Print pretty JSON
-        System.out.println(prettyJson);
+    // Method to check if the server is up
+    public static boolean isServerUp(String serverUrl) {
+        try {
+            URL url = new URL(serverUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000); // 5 seconds timeout
+            connection.setReadTimeout(5000);
+            int responseCode = connection.getResponseCode();
+            return responseCode == 200; // HTTP 200 means OK
+        } catch (IOException e) {
+            System.err.println("Error connecting to the server: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Placeholder method for restarting the server
+    public static void restartServer() {
+        // Add your server restart logic here
+        // For example, you could call a shell script or use a process manager
+        System.out.println("Restart command issued to the server.");
     }
 }
