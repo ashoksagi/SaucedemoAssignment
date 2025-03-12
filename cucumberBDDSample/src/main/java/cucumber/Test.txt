@@ -1,1 +1,29 @@
-java -Xms24g -Xmx24g -cp your-classpath your-main-class
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class Main {
+    public static void main(String[] args) {
+        String jsonResponse = "["
+                + "    {"
+                + "        \"profileCode\": \"wires\","
+                + "        \"profileName\": \"Wire Approvals\","
+                + "        \"approvalStructureType\": \"FIXED\","
+                + "        \"noOfApprovers\": \"1\","
+                + "        \"profileStatus\": \"ACTIVE\""
+                + "    }"
+                + "]";
+
+        // Parse the JSON response as a JSONArray
+        JSONArray jsonArray = new JSONArray(jsonResponse);
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+            // Retrieve the profileStatus value
+            String profileStatus = jsonObject.getString("profileStatus");
+
+            // Print the retrieved value
+            System.out.println("Profile Status: " + profileStatus);
+        }
+    }
+}
