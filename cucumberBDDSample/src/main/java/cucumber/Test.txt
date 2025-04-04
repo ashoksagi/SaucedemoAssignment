@@ -1,5 +1,4 @@
-SELECT cols.column_name
-FROM all_constraints cons
-JOIN all_cons_columns cols ON cons.constraint_name = cols.constraint_name
-WHERE cons.constraint_type = 'P'
-  AND cons.table_name = 'YOUR_TABLE_NAME';
+[
+  { "$match": { "statusCode": 200 } },
+  { "$count": "totalOccurrences" }
+]
