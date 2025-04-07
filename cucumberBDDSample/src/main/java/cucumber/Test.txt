@@ -1,4 +1,44 @@
 [
-  { "$match": { "statusCode": 200 } },
-  { "$count": "totalOccurrences" }
+  {
+    "$match": {
+      "customerNumber": "<customerNumber>",
+      "companyType": "<companyResource>"
+    }
+  },
+  {
+    "$lookup": {
+      "from": "companyResource",
+      "localField": "companyType",
+      "foreignField": "companyType",
+      "as": "companyDetails"
+    }
+  },
+  {
+    "$unwind": "$companyDetails"
+  },
+  {
+    "$match": {
+      "companyType": "$companyDetails.companyType",
+      "companyNumber": "$companyDetails.companyNumber"
+    }
+  },
+  {
+    "$group": {
+      "_id": "$companyDetails.companyNumber",
+      "details": { "$push": "$companyDetails" }
+    }
+  },
+  {
+    "$project": {
+      "companyType": "$companyDetails.companyType",
+      "companyNumber": "$companyDetails.companyNumber",
+      "details": { "$slice": [ "$companyDetails.details", 0, 1 ] }
+    }
+  },
+  {
+    "$sort": { "companyDetails.companyNumber": 1 }
+  },
+  {
+    "$limit": 1
+  }
 ]
