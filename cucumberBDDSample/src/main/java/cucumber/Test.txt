@@ -1,28 +1,35 @@
-import com.github.victools.jsonschema.generator.SchemaGenerator;
-import com.github.victools.jsonschema.generator.SchemaGeneratorConfig;
-import com.github.victools.jsonschema.generator.SchemaGeneratorConfigBuilder;
-import com.github.victools.jsonschema.generator.SchemaVersion;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.HashSet;
 
-public class JsonSchemaGeneratorExample {
+public class APIResponseValidator {
     public static void main(String[] args) throws Exception {
-        // Sample JSON string
-        String jsonString = "{ \"name\": \"John\", \"age\": 30, \"city\": \"New York\" }";
+        // Expected attributes
+        Set<String> expectedAttributes = Set.of("name", "age", "city");
+
+        // Sample API response (JSON string)
+        String jsonResponse = "{ \"name\": \"John\", \"age\": 30, \"city\": \"New York\" }";
 
         // Convert JSON string to JsonNode
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(jsonString);
+        JsonNode jsonNode = objectMapper.readTree(jsonResponse);
 
-        // Configure Schema Generator
-        SchemaGeneratorConfigBuilder configBuilder = new SchemaGeneratorConfigBuilder(SchemaVersion.DRAFT_2020_12);
-        SchemaGeneratorConfig config = configBuilder.build();
-        SchemaGenerator generator = new SchemaGenerator(config);
+        // Extract actual attributes
+        Set<String> actualAttributes = new HashSet<>();
+        Iterator<String> fieldNames = jsonNode.fieldNames();
+        while (fieldNames.hasNext()) {
+            actualAttributes.add(fieldNames.next());
+        }
 
-        // Generate JSON Schema
-        JsonNode jsonSchema = generator.generateSchema(jsonNode.getClass());
-
-        // Print JSON Schema
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonSchema));
+        // Validate attributes
+        if (actualAttributes.equals(expectedAttributes)) {
+            System.out.println("✅ API response attributes are valid!");
+        } else {
+            System.out.println("❌ API response attributes do not match expected attributes.");
+            System.out.println("Expected: " + expectedAttributes);
+            System.out.println("Actual: " + actualAttributes);
+        }
     }
 }
