@@ -1,112 +1,27 @@
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "properties": {
-    "companyId": {
-      "type": "string"
-    },
-    "profileNode": {
-      "type": "string"
-    },
-    "profileId": {
-      "type": "string"
-    },
-    "profileName": {
-      "type": "string"
-    },
-    "profileType": {
-      "type": "string"
-    },
-    "approvalStructure": {
-      "type": "string"
-    },
-    "paymentType": {
-      "type": "string"
-    },
-    "paymentStatus": {
-      "type": "string"
-    },
-    "currency": {
-      "type": ["string", "null"]
-    },
-    "accounts": {
-      "type": "object",
-      "properties": {
-        "pagination": {
-          "type": "object",
-          "properties": {
-            "offset": {
-              "type": "integer"
-            },
-            "limit": {
-              "type": "integer"
-            },
-            "total": {
-              "type": "integer"
-            }
-          },
-          "required": ["offset", "limit", "total"]
-        },
-        "accountLst": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "accountNo": {
-                "type": "string"
-              },
-              "accountId": {
-                "type": "string"
-              },
-              "category": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "integer"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "type": "string"
-                    },
-                    "level": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    }
-                  },
-                  "required": ["id", "name", "type", "level", "description"]
-                }
-              },
-              "currency": {
-                "type": "string"
-              },
-              "paymentType": {
-                "type": "string"
-              },
-              "paymentStatus": {
-                "type": "string"
-              },
-              "paymentTransmission": {
-                "type": "string"
-              },
-              "level": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              }
-            },
-            "required": ["accountNo", "accountId", "category", "currency", "paymentType", "paymentStatus", "paymentTransmission", "level", "description"]
-          }
-        }
-      },
-      "required": ["pagination", "accountLst"]
+import com.github.fge.jsonschema.main.JsonSchema;
+import com.github.fge.jsonschema.main.JsonSchemaFactory;
+import com.github.fge.jsonschema.main.JsonValidator;
+import com.github.fge.jsonschema.processors.syntax.SyntaxValidator;
+import com.github.fge.jsonschema.report.ProcessingReport;
+import com.github.fge.jsonschema.util.JsonLoader;
+import com.fasterxml.jackson.databind.JsonNode;
+
+public class JSONSchemaValidation {
+    public static void main(String[] args) throws Exception {
+        // Load JSON Schema
+        String schemaJson = "{ YOUR_SCHEMA_HERE }";
+        JsonNode schemaNode = JsonLoader.fromString(schemaJson);
+
+        // Load JSON Response
+        String responseJson = "{ YOUR_JSON_RESPONSE_HERE }";
+        JsonNode responseNode = JsonLoader.fromString(responseJson);
+
+        // Validate Schema
+        JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
+        JsonSchema schema = factory.getJsonSchema(schemaNode);
+        ProcessingReport report = schema.validate(responseNode);
+
+        // Print validation results
+        System.out.println(report);
     }
-  },
-  "required": ["companyId", "profileNode", "profileId", "profileName", "profileType", "approvalStructure", "paymentType", "paymentStatus", "currency", "accounts"]
 }
