@@ -1,44 +1,22 @@
 [
   {
-    "$match": {
-      "customerNumber": "<customerNumber>",
-      "companyType": "<companyResource>"
-    }
-  },
-  {
-    "$lookup": {
-      "from": "companyResource",
-      "localField": "companyType",
-      "foreignField": "companyType",
-      "as": "companyDetails"
-    }
-  },
-  {
-    "$unwind": "$companyDetails"
-  },
-  {
-    "$match": {
-      "companyType": "$companyDetails.companyType",
-      "companyNumber": "$companyDetails.companyNumber"
-    }
-  },
-  {
     "$group": {
-      "_id": "$companyDetails.companyNumber",
-      "details": { "$push": "$companyDetails" }
+      "_id": "$company_id",
+      "uniqueStatusCodes": { "$addToSet": "$status_code" },
+      "users": { "$push": "$user_id" }
+    }
+  },
+  {
+    "$match": {
+      "uniqueStatusCodes.1": { "$exists": true }
     }
   },
   {
     "$project": {
-      "companyType": "$companyDetails.companyType",
-      "companyNumber": "$companyDetails.companyNumber",
-      "details": { "$slice": [ "$companyDetails.details", 0, 1 ] }
+      "company_id": "$_id",
+      "users": 1,
+      "uniqueStatusCodes": 1,
+      "_id": 0
     }
-  },
-  {
-    "$sort": { "companyDetails.companyNumber": 1 }
-  },
-  {
-    "$limit": 1
   }
 ]
