@@ -1,27 +1,28 @@
-import com.github.fge.jsonschema.main.JsonSchema;
-import com.github.fge.jsonschema.main.JsonSchemaFactory;
-import com.github.fge.jsonschema.main.JsonValidator;
-import com.github.fge.jsonschema.processors.syntax.SyntaxValidator;
-import com.github.fge.jsonschema.report.ProcessingReport;
-import com.github.fge.jsonschema.util.JsonLoader;
+import com.github.victools.jsonschema.generator.SchemaGenerator;
+import com.github.victools.jsonschema.generator.SchemaGeneratorConfig;
+import com.github.victools.jsonschema.generator.SchemaGeneratorConfigBuilder;
+import com.github.victools.jsonschema.generator.SchemaVersion;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JSONSchemaValidation {
+public class JsonSchemaGeneratorExample {
     public static void main(String[] args) throws Exception {
-        // Load JSON Schema
-        String schemaJson = "{ YOUR_SCHEMA_HERE }";
-        JsonNode schemaNode = JsonLoader.fromString(schemaJson);
+        // Sample JSON string
+        String jsonString = "{ \"name\": \"John\", \"age\": 30, \"city\": \"New York\" }";
 
-        // Load JSON Response
-        String responseJson = "{ YOUR_JSON_RESPONSE_HERE }";
-        JsonNode responseNode = JsonLoader.fromString(responseJson);
+        // Convert JSON string to JsonNode
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(jsonString);
 
-        // Validate Schema
-        JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
-        JsonSchema schema = factory.getJsonSchema(schemaNode);
-        ProcessingReport report = schema.validate(responseNode);
+        // Configure Schema Generator
+        SchemaGeneratorConfigBuilder configBuilder = new SchemaGeneratorConfigBuilder(SchemaVersion.DRAFT_2020_12);
+        SchemaGeneratorConfig config = configBuilder.build();
+        SchemaGenerator generator = new SchemaGenerator(config);
 
-        // Print validation results
-        System.out.println(report);
+        // Generate JSON Schema
+        JsonNode jsonSchema = generator.generateSchema(jsonNode.getClass());
+
+        // Print JSON Schema
+        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonSchema));
     }
 }
