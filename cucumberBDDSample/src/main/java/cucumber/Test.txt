@@ -1,22 +1,23 @@
-[
-  {
-    "$group": {
-      "_id": "$company_id",
-      "uniqueStatusCodes": { "$addToSet": "$status_code" },
-      "users": { "$push": "$user_id" }
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.module.jsv.JsonSchemaValidator;
+import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.*;
+
+public class ApiSchemaValidationTest {
+
+    @Test
+    public void validateApiResponseSchema() {
+        RestAssured.baseURI = "https://your-api-endpoint.com";
+
+        given()
+            .contentType(ContentType.JSON)
+        .when()
+            .get("/users/123") // Replace with the actual endpoint
+        .then()
+            .assertThat()
+            .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("expectedSchema.json"))
+            .statusCode(200);
     }
-  },
-  {
-    "$match": {
-      "uniqueStatusCodes.1": { "$exists": true }
-    }
-  },
-  {
-    "$project": {
-      "company_id": "$_id",
-      "users": 1,
-      "uniqueStatusCodes": 1,
-      "_id": 0
-    }
-  }
-]
+}
