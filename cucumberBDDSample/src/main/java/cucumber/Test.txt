@@ -1,35 +1,44 @@
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.HashSet;
 
-public class APIResponseValidator {
-    public static void main(String[] args) throws Exception {
-        // Expected attributes
-        Set<String> expectedAttributes = Set.of("name", "age", "city");
+public class JsonArrayProcessor {
 
-        // Sample API response (JSON string)
-        String jsonResponse = "{ \"name\": \"John\", \"age\": 30, \"city\": \"New York\" }";
-
-        // Convert JSON string to JsonNode
+    public static Set<String> extractAttributes(String json) {
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+        Set<String> attributes = new HashSet<>();
 
-        // Extract actual attributes
-        Set<String> actualAttributes = new HashSet<>();
-        Iterator<String> fieldNames = jsonNode.fieldNames();
-        while (fieldNames.hasNext()) {
-            actualAttributes.add(fieldNames.next());
+        try {
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+            if (jsonNode.isArray()) {
+                ArrayNode arrayNode = (ArrayNode) jsonNode;
+                for (JsonNode node : arrayNode) {
+                    Iterator<String> fieldNames = node.fieldNames();
+                    while (fieldNames.hasNext()) {
+                        attributes.add(fieldNames.next());
+                    }
+                }
+            } else {
+                Iterator<String> fieldNames = jsonNode.fieldNames();
+                while (fieldNames.hasNext()) {
+                    attributes.add(fieldNames.next());
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
-        // Validate attributes
-        if (actualAttributes.equals(expectedAttributes)) {
-            System.out.println("✅ API response attributes are valid!");
-        } else {
-            System.out.println("❌ API response attributes do not match expected attributes.");
-            System.out.println("Expected: " + expectedAttributes);
-            System.out.println("Actual: " + actualAttributes);
-        }
+        return attributes;
+    }
+
+    public static void main(String[] args) {
+        String json = "[{\"profileCode\":\"Additnp\",\"profileName\":\"Add profile Internal\",\"approvalStructureType\":\"FIXED\"}]";
+        Set<String> attributes = extractAttributes(json);
+        System.out.println(attributes);
     }
 }
