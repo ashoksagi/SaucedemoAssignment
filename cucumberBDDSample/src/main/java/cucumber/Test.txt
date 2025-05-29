@@ -1,44 +1,29 @@
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
+Sure! Based on the database structure from your image, you can use MongoDB's aggregation framework to find `compId` values that have different `userStatusCode` values. Here’s the query:
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-public class JsonArrayProcessor {
-
-    public static Set<String> extractAttributes(String json) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Set<String> attributes = new HashSet<>();
-
-        try {
-            JsonNode jsonNode = objectMapper.readTree(json);
-
-            if (jsonNode.isArray()) {
-                ArrayNode arrayNode = (ArrayNode) jsonNode;
-                for (JsonNode node : arrayNode) {
-                    Iterator<String> fieldNames = node.fieldNames();
-                    while (fieldNames.hasNext()) {
-                        attributes.add(fieldNames.next());
-                    }
-                }
-            } else {
-                Iterator<String> fieldNames = jsonNode.fieldNames();
-                while (fieldNames.hasNext()) {
-                    attributes.add(fieldNames.next());
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return attributes;
+```javascript
+db.CPOADMIN.user.aggregate([
+  {
+    $group: {
+      _id: "$compId",
+      userStatusCodes: { $addToSet: "$userStatusCode" },
+      count: { $sum: 1 }
     }
-
-    public static void main(String[] args) {
-        String json = "[{\"profileCode\":\"Additnp\",\"profileName\":\"Add profile Internal\",\"approvalStructureType\":\"FIXED\"}]";
-        Set<String> attributes = extractAttributes(json);
-        System.out.println(attributes);
+  },
+  {
+    $match: {
+      count: { $gt: 1 },
+      userStatusCodes: { $size: { $gt: 1 } }
     }
-}
+  }
+])
+```
+
+### Explanation:
+- The `$group` stage groups documents by `compId`, collecting unique `userStatusCode` values.
+- The `$match` stage filters to only include `compId` values where:
+  - There’s more than one document (`count > 1`).
+  - There are multiple unique `userStatusCode` values.
+
+This will return `compId` entries that appear more than once but with different `userStatusCode` values.
+
+Hope that helps! Let me know if you need further refinements.
