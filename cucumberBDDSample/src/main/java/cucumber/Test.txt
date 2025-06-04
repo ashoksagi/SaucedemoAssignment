@@ -1,29 +1,14 @@
-Sure! Based on the database structure from your image, you can use MongoDB's aggregation framework to find `compId` values that have different `userStatusCode` values. Here’s the query:
-
-```javascript
-db.CPOADMIN.user.aggregate([
+db.CPOADMIN.userResource.aggregate([
   {
     $group: {
       _id: "$compId",
-      userStatusCodes: { $addToSet: "$userStatusCode" },
-      count: { $sum: 1 }
+      userCount: { $sum: 1 }
     }
   },
   {
-    $match: {
-      count: { $gt: 1 },
-      userStatusCodes: { $size: { $gt: 1 } }
-    }
+    $sort: { userCount: -1 }
+  },
+  {
+    $limit: 1
   }
 ])
-```
-
-### Explanation:
-- The `$group` stage groups documents by `compId`, collecting unique `userStatusCode` values.
-- The `$match` stage filters to only include `compId` values where:
-  - There’s more than one document (`count > 1`).
-  - There are multiple unique `userStatusCode` values.
-
-This will return `compId` entries that appear more than once but with different `userStatusCode` values.
-
-Hope that helps! Let me know if you need further refinements.
