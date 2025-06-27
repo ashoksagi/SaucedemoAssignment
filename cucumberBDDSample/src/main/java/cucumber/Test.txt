@@ -1,32 +1,35 @@
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class JsonParser {
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ExcelReader {
     public static void main(String[] args) {
-        String jsonResponse = "{ \"data\": [" +
-                "{ \"compId\": \"ns2fas12\", \"compName\": \"New Company ns2fas12\", \"gciNum\": \"326768371\", \"userName\": \"Nivedita Singh\", \"userId\": \"npadmin1\", \"email\": \"nivedita.singh@bankofamerica2.com\", \"userType\": \"PRIMARY_ADMINISTRATOR\" }," +
-                "{ \"compId\": \"nsobapa3\", \"compName\": \"New Company nsobapa3\", \"gciNum\": \"326768371\", \"userName\": \"Nivedita Singh\", \"userId\": \"npadmin1\", \"email\": \"nivedita.singh@bankofamerica2.com\", \"userType\": \"PRIMARY_ADMINISTRATOR\" }," +
-                "{ \"compId\": \"bu1khk23\", \"compName\": \"New Company bu1khk23\", \"gciNum\": \"326768371\", \"userName\": \"Nivedita Singh\", \"userId\": \"npadmin1\", \"email\": \"nivedita.singh@bankofamerica2.com\", \"userType\": \"PRIMARY_ADMINISTRATOR\" }" +
-                "] }";
+        String excelFilePath = "data.xlsx";
+        List<String> dataList = new ArrayList<>();
 
-        JSONObject jsonObject = new JSONObject(jsonResponse);
-        JSONArray dataArray = jsonObject.getJSONArray("data");
+        try (FileInputStream file = new FileInputStream(excelFilePath);
+             Workbook workbook = new XSSFWorkbook(file)) {
 
-        String targetCompId = "ns2fas12";
-        String targetCompName = "New Company ns2fas12";
+            Sheet sheet = workbook.getSheetAt(0); // Get first sheet
 
-        for (int i = 0; i < dataArray.length(); i++) {
-            JSONObject company = dataArray.getJSONObject(i);
-            if (company.getString("compId").equals(targetCompId) && company.getString("compName").equals(targetCompName)) {
-                System.out.println("Selected Company:");
-                System.out.println("compId: " + company.getString("compId"));
-                System.out.println("compName: " + company.getString("compName"));
-                System.out.println("gciNum: " + company.getString("gciNum"));
-                System.out.println("userName: " + company.getString("userName"));
-                System.out.println("userId: " + company.getString("userId"));
-                System.out.println("email: " + company.getString("email"));
-                System.out.println("userType: " + company.getString("userType"));
+            for (Row row : sheet) {
+                for (Cell cell : row) {
+                    String cellValue = cell.toString(); // Convert any cell to string
+                    dataList.add(cellValue);
+                }
             }
+
+            // Iterate and print values
+            for (String value : dataList) {
+                System.out.println(value);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
