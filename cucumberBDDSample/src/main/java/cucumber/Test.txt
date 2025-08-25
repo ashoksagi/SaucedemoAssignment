@@ -1,6 +1,9 @@
 // Validate attributes
-Set<String> sortedExpected = new TreeSet<>(String.CASE_INSENSITIVE_ORDER, expectedAttributes);
-Set<String> sortedActual = new TreeSet<>(String.CASE_INSENSITIVE_ORDER, actualAttributes);
+Set<String> sortedExpected = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+sortedExpected.addAll(expectedAttributes);
+Set<String> sortedActual = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+sortedActual.addAll(actualAttributes);
+
 if (sortedExpected.equals(sortedActual) && actualAttributes != null) {
     System.out.println("✔ API response attributes are valid!");
     this.logger.info("API response attributes are valid!");
