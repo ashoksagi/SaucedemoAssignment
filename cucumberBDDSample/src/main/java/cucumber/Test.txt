@@ -1,35 +1,30 @@
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-public class ExcelReader {
-    public static void main(String[] args) {
-        String excelFilePath = "data.xlsx";
-        List<String> dataList = new ArrayList<>();
-
-        try (FileInputStream file = new FileInputStream(excelFilePath);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Get first sheet
-
-            for (Row row : sheet) {
-                for (Cell cell : row) {
-                    String cellValue = cell.toString(); // Convert any cell to string
-                    dataList.add(cellValue);
-                }
-            }
-
-            // Iterate and print values
-            for (String value : dataList) {
-                System.out.println(value);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+// Validate attributes
+Set<String> sortedExpected = new TreeSet<>(String.CASE_INSENSITIVE_ORDER, expectedAttributes);
+Set<String> sortedActual = new TreeSet<>(String.CASE_INSENSITIVE_ORDER, actualAttributes);
+if (sortedExpected.equals(sortedActual) && actualAttributes != null) {
+    System.out.println("✔ API response attributes are valid!");
+    this.logger.info("API response attributes are valid!");
+    expectedAttributes.clear();
+    actualAttributes.clear();
+} else {
+    System.out.println("✘ API response attributes do not match expected attributes.");
+    System.out.println("Expected: " + sortedExpected);
+    System.out.println("Actual: " + sortedActual);
+    Set<String> missing = new HashSet<>(sortedExpected);
+    missing.removeAll(sortedActual);
+    Set<String> extra = new HashSet<>(sortedActual);
+    extra.removeAll(sortedExpected);
+    if (!missing.isEmpty()) {
+        System.out.println("✘ Missing: " + missing);
+        this.logger.info("Missing: " + missing);
     }
+    if (!extra.isEmpty()) {
+        System.out.println("✘ Extra: " + extra);
+        this.logger.info("Extra: " + extra);
+    }
+    missing = null;
+    extra = null;
+    expectedAttributes.clear();
+    actualAttributes.clear();
+    org.junit.Assert.assertTrue(condition: false);
 }
