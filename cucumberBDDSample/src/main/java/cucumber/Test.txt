@@ -1,33 +1,13 @@
-// Validate attributes
-Set<String> sortedExpected = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-sortedExpected.addAll(expectedAttributes);
-Set<String> sortedActual = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-sortedActual.addAll(actualAttributes);
+public class HeapInfo {
+    public static void main(String[] args) {
+        Runtime runtime = Runtime.getRuntime();
 
-if (sortedExpected.equals(sortedActual) && actualAttributes != null) {
-    System.out.println("✔ API response attributes are valid!");
-    this.logger.info("API response attributes are valid!");
-    expectedAttributes.clear();
-    actualAttributes.clear();
-} else {
-    System.out.println("✘ API response attributes do not match expected attributes.");
-    System.out.println("Expected: " + sortedExpected);
-    System.out.println("Actual: " + sortedActual);
-    Set<String> missing = new HashSet<>(sortedExpected);
-    missing.removeAll(sortedActual);
-    Set<String> extra = new HashSet<>(sortedActual);
-    extra.removeAll(sortedExpected);
-    if (!missing.isEmpty()) {
-        System.out.println("✘ Missing: " + missing);
-        this.logger.info("Missing: " + missing);
+        long maxMemory = runtime.maxMemory();       // Maximum heap size (bytes)
+        long totalMemory = runtime.totalMemory();   // Current heap size (bytes)
+        long freeMemory = runtime.freeMemory();     // Free heap space (bytes)
+
+        System.out.println("Max heap size: " + (maxMemory / (1024 * 1024)) + " MB");
+        System.out.println("Total heap size: " + (totalMemory / (1024 * 1024)) + " MB");
+        System.out.println("Free heap space: " + (freeMemory / (1024 * 1024)) + " MB");
     }
-    if (!extra.isEmpty()) {
-        System.out.println("✘ Extra: " + extra);
-        this.logger.info("Extra: " + extra);
-    }
-    missing = null;
-    extra = null;
-    expectedAttributes.clear();
-    actualAttributes.clear();
-    org.junit.Assert.assertTrue(condition: false);
 }
