@@ -1,13 +1,15 @@
-public class HeapInfo {
-    public static void main(String[] args) {
-        Runtime runtime = Runtime.getRuntime();
+We have developed an automated, multi‑threaded validation framework designed to ensure seamless migration from Oracle to MongoDB.  
 
-        long maxMemory = runtime.maxMemory();       // Maximum heap size (bytes)
-        long totalMemory = runtime.totalMemory();   // Current heap size (bytes)
-        long freeMemory = runtime.freeMemory();     // Free heap space (bytes)
+- Parallel Execution: The framework can run all APIs simultaneously, dramatically reducing validation time and increasing efficiency.  
+- Automated Response Comparison: It compares API outputs from Oracle and MongoDB in real time, ensuring consistency and accuracy across systems.  
+- Comprehensive Validation: All production companies and user services have been tested, confirming that MongoDB delivers the same responses as Oracle.  
+- Business Assurance: This guarantees that after migration, customers continue to receive identical service quality and data integrity, with no disruption to business operations.  
 
-        System.out.println("Max heap size: " + (maxMemory / (1024 * 1024)) + " MB");
-        System.out.println("Total heap size: " + (totalMemory / (1024 * 1024)) + " MB");
-        System.out.println("Free heap space: " + (freeMemory / (1024 * 1024)) + " MB");
-    }
-}
+---
+
+Business Impact
+
+- Risk Mitigation: Eliminates the risk of discrepancies during database migration.  
+- Operational Continuity: Ensures that services remain reliable and consistent for all users.  
+- Efficiency Gains: Automated parallel testing accelerates validation, reducing manual effort and time.  
+- Confidence in Migration: Provides stakeholders with assurance that MongoDB can fully replace Oracle without impacting customer experience.  
