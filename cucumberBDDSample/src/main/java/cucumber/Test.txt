@@ -1,15 +1,45 @@
-We have developed an automated, multi‑threaded validation framework designed to ensure seamless migration from Oracle to MongoDB.  
+import java.util.Base64;
+// ... other imports
 
-- Parallel Execution: The framework can run all APIs simultaneously, dramatically reducing validation time and increasing efficiency.  
-- Automated Response Comparison: It compares API outputs from Oracle and MongoDB in real time, ensuring consistency and accuracy across systems.  
-- Comprehensive Validation: All production companies and user services have been tested, confirming that MongoDB delivers the same responses as Oracle.  
-- Business Assurance: This guarantees that after migration, customers continue to receive identical service quality and data integrity, with no disruption to business operations.  
+public static String executeRestCall(String urlString, String method, Map<String, Object> headers, JSONObject body, String clientId, String clientSecret) {
+    try {
+        // ... (Your existing URL parsing logic from lines 118-128)
 
----
+        URL url = new URL(finalUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod(method);
+        
+        // 1. ADD BASIC AUTHENTICATION HEADER
+        if (clientId != null && clientSecret != null) {
+            String auth = clientId + ":" + clientSecret;
+            String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes("UTF-8"));
+            conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
+        }
 
-Business Impact
+        // 2. ADD EXISTING HEADERS
+        if (headers != null) {
+            for (Map.Entry<String, Object> entry : headers.entrySet()) {
+                conn.setRequestProperty(entry.getKey(), entry.getValue().toString());
+            }
+        }
 
-- Risk Mitigation: Eliminates the risk of discrepancies during database migration.  
-- Operational Continuity: Ensures that services remain reliable and consistent for all users.  
+        conn.setDoOutput(body != null && !body.isEmpty());
+
+        // 3. SEND BODY
+        if (body != null && !body.isEmpty()) {
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(body.toString().getBytes("UTF-8"));
+            }
+        }
+
+        int status = conn.getResponseCode();
+        // Handle response... (use conn.getInputStream() for 200, conn.getErrorStream() for 400+)
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return null; 
+}
 - Efficiency Gains: Automated parallel testing accelerates validation, reducing manual effort and time.  
 - Confidence in Migration: Provides stakeholders with assurance that MongoDB can fully replace Oracle without impacting customer experience.  
+
