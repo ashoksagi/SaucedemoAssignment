@@ -1,45 +1,57 @@
 import java.util.Base64;
+import java.nio.charset.StandardCharsets;
 // ... other imports
 
-public static String executeRestCall(String urlString, String method, Map<String, Object> headers, JSONObject body, String clientId, String clientSecret) {
+public static String executeRestCall(String urlString, String method, Map<String, Object> headers, JSONObject body) {
     try {
-        // ... (Your existing URL parsing logic from lines 118-128)
-
+        // ... (Existing URL and Connection setup logic from your screenshot)
         URL url = new URL(finalUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(method);
-        
-        // 1. ADD BASIC AUTHENTICATION HEADER
-        if (clientId != null && clientSecret != null) {
-            String auth = clientId + ":" + clientSecret;
-            String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes("UTF-8"));
-            conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
+
+        // --- NEW AUTHENTICATION LOGIC ---
+        JSONObject authContext = CukeContext.getCurrentServiceInstance().getJsonrequestobj();
+        if (authContext != null && authContext.has("application/x-www-form-urlencoded")) {
+            // 1. Get the raw string: "grant_type=client_credentials&client_id=...&client_secret=..."
+            String rawData = authContext.getString("application/x-www-form-urlencoded");
+            
+            // 2. Extract client_id and client_secret from the string
+            String clientId = extractParam(rawData, "client_id");
+            String clientSecret = extractParam(rawData, "client_secret");
+
+            if (clientId != null && clientSecret != null) {
+                // 3. Create the Basic Auth Header
+                String auth = clientId + ":" + clientSecret;
+                String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
+                conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
+            }
         }
 
-        // 2. ADD EXISTING HEADERS
+        // ... (Existing Header and Body logic)
         if (headers != null) {
             for (Map.Entry<String, Object> entry : headers.entrySet()) {
                 conn.setRequestProperty(entry.getKey(), entry.getValue().toString());
             }
         }
-
-        conn.setDoOutput(body != null && !body.isEmpty());
-
-        // 3. SEND BODY
-        if (body != null && !body.isEmpty()) {
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(body.toString().getBytes("UTF-8"));
-            }
-        }
-
+        
+        // Finalize request...
         int status = conn.getResponseCode();
-        // Handle response... (use conn.getInputStream() for 200, conn.getErrorStream() for 400+)
         
     } catch (Exception e) {
         e.printStackTrace();
     }
-    return null; 
+    return null;
 }
-- Efficiency Gains: Automated parallel testing accelerates validation, reducing manual effort and time.  
-- Confidence in Migration: Provides stakeholders with assurance that MongoDB can fully replace Oracle without impacting customer experience.  
 
+/**
+ * Helper method to extract specific values from the URL-encoded string
+ */
+private static String extractParam(String data, String param) {
+    for (String pair : data.split("&")) {
+        String[] parts = pair.split("=");
+        if (parts.length == 2 && parts[0].equalsIgnoreCase(param)) {
+            return parts[1];
+        }
+    }
+    return null;
+}
