@@ -1,57 +1,8 @@
-import java.util.Base64;
-import java.nio.charset.StandardCharsets;
-// ... other imports
-
-public static String executeRestCall(String urlString, String method, Map<String, Object> headers, JSONObject body) {
-    try {
-        // ... (Existing URL and Connection setup logic from your screenshot)
-        URL url = new URL(finalUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod(method);
-
-        // --- NEW AUTHENTICATION LOGIC ---
-        JSONObject authContext = CukeContext.getCurrentServiceInstance().getJsonrequestobj();
-        if (authContext != null && authContext.has("application/x-www-form-urlencoded")) {
-            // 1. Get the raw string: "grant_type=client_credentials&client_id=...&client_secret=..."
-            String rawData = authContext.getString("application/x-www-form-urlencoded");
-            
-            // 2. Extract client_id and client_secret from the string
-            String clientId = extractParam(rawData, "client_id");
-            String clientSecret = extractParam(rawData, "client_secret");
-
-            if (clientId != null && clientSecret != null) {
-                // 3. Create the Basic Auth Header
-                String auth = clientId + ":" + clientSecret;
-                String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
-                conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
-            }
-        }
-
-        // ... (Existing Header and Body logic)
-        if (headers != null) {
-            for (Map.Entry<String, Object> entry : headers.entrySet()) {
-                conn.setRequestProperty(entry.getKey(), entry.getValue().toString());
-            }
-        }
-        
-        // Finalize request...
-        int status = conn.getResponseCode();
-        
-    } catch (Exception e) {
-        e.printStackTrace();
+int status = conn.getResponseCode();
+if (status >= 400) {
+    try (java.io.InputStream es = conn.getErrorStream();
+         java.util.Scanner s = new java.util.Scanner(es).useDelimiter("\\A")) {
+        String error = s.hasNext() ? s.next() : "";
+        System.out.println("SERVER ERROR MESSAGE: " + error);
     }
-    return null;
-}
-
-/**
- * Helper method to extract specific values from the URL-encoded string
- */
-private static String extractParam(String data, String param) {
-    for (String pair : data.split("&")) {
-        String[] parts = pair.split("=");
-        if (parts.length == 2 && parts[0].equalsIgnoreCase(param)) {
-            return parts[1];
-        }
-    }
-    return null;
 }
